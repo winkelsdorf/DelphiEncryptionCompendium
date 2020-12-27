@@ -16,9 +16,9 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Tests\defines.inc" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Tests\TestDefines.inc" Condition="'$(Config)'=='Debug'">
             <RemoteDir>DECDUnitXTestSuite\</RemoteDir>
-            <RemoteName>defines.inc</RemoteName>
+            <RemoteName>TestDefines.inc</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
@@ -38,9 +38,9 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Win64'"/>
     <ItemGroup Condition="'$(Platform)'=='Android'">
-        <DeployFile Include="Tests\defines.inc" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Tests\TestDefines.inc" Condition="'$(Config)'=='Debug'">
             <RemoteDir>DECDUnitXTestSuite\assets\internal\</RemoteDir>
-            <RemoteName>defines.inc</RemoteName>
+            <RemoteName>TestDefines.inc</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>

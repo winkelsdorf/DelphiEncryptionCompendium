@@ -19,19 +19,18 @@
 unit TestDECBaseClass;
 
 // Needs to be included before any other statements
-{$I defines.inc}
+{$INCLUDE TestDefines.inc}
 
 interface
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
+  System.SysUtils, System.Classes, Generics.Collections,
   {$IFDEF DUnitX}
   DUnitX.TestFramework,DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-
-  Classes, DECBaseClass, SysUtils, Generics.Collections;
+  DECBaseClass, DECFormat, DECCiphers;
 
 type
   // Test methods for class TDECClassList
@@ -67,9 +66,6 @@ type
   end;
 
 implementation
-
-uses
-  DECFormat, DECCiphers;
 
 procedure TestTDECClassList.SetUp;
 begin
@@ -243,11 +239,11 @@ end;
 
 initialization
   // Register any test cases with the test runner
-  {$IFNDEF DUnitX}
-  RegisterTests('DECBaseClass', [TestTDECClassList.Suite, TestTDECObject.Suite]);
-  {$ELSE}
+  {$IFDEF DUnitX}
   TDUnitX.RegisterTestFixture(TestTDECClassList);
   TDUnitX.RegisterTestFixture(TestTDECObject);
+  {$ELSE}
+  RegisterTests('DECBaseClass', [TestTDECClassList.Suite, TestTDECObject.Suite]);
   {$ENDIF}
 end.
 

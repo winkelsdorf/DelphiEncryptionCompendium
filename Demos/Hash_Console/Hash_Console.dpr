@@ -26,18 +26,8 @@ program Hash_Console;
 
 uses
   System.SysUtils,
-  DECBaseClass in '..\..\Source\DECBaseClass.pas',
-  DECCRC in '..\..\Source\DECCRC.pas',
-  DECFormat in '..\..\Source\DECFormat.pas',
-  DECHash in '..\..\Source\DECHash.pas',
-  DECHashBase in '..\..\Source\DECHashBase.pas',
-  DECTypes in '..\..\Source\DECTypes.pas',
-  DECUtil in '..\..\Source\DECUtil.pas',
-  DECFormatBase in '..\..\Source\DECFormatBase.pas',
-  DECData in '..\..\Source\DECData.pas',
-  DECUtilRawByteStringHelper in '..\..\Source\DECUtilRawByteStringHelper.pas',
-  DECHashInterface in '..\..\Source\DECHashInterface.pas',
-  DECDataHash in '..\..\Source\DECDataHash.pas';
+  DECFormat,
+  DECHash;
 
 var
   Hash : THash_RipeMD160;

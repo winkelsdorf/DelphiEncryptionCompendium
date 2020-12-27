@@ -2,8 +2,8 @@
   The DEC team (see file NOTICE.txt) licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License. A copy of this licence is found in the root directory of
-  this project in the file LICENCE.txt or alternatively at
+  with the License. A copy of this licence is found in the root directory
+  of this project in the file LICENCE.txt or alternatively at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -22,10 +22,18 @@ unit DECUtil;
 
 interface
 
-{$I DECOptions.inc}
+{$INCLUDE DECOptions.inc}
 
 uses
-  SysUtils, Classes, DECBaseClass, DECTypes;
+  {$IFDEF FPC}
+  SysUtils, Classes,
+  {$ELSE}
+  System.SysUtils, System.Classes,
+  {$ENDIF}
+  {$IFDEF FMXTranslateableExceptions}
+  FMX.Types,
+  {$ENDIF}
+  DECBaseClass, DECTypes, DECUtilRawByteStringHelper;
 
 type
   // Exception Classes
@@ -260,16 +268,10 @@ procedure ProtectString(var Source: string); overload;
 /// <param name="Source">
 ///   String to be safely overwritten
 /// </param>
-procedure ProtectString(var Source: RawByteString); overload;
-
 {$IFDEF ANSISTRINGSUPPORTED}
-/// <summary>
-///   Overwrites the string's contents in a secure way and returns an empty string.
-/// </summary>
-/// <param name="Source">
-///   String to be safely overwritten
-/// </param>
 procedure ProtectString(var Source: AnsiString); overload;
+{$ELSE}
+procedure ProtectString(var Source: RawByteString); overload;
 {$ENDIF}
 
 {$IFNDEF NEXTGEN}
@@ -302,14 +304,6 @@ procedure ProtectString(var Source: WideString); overload;
 function BytesToRawString(const Source: TBytes): RawByteString;
 
 implementation
-
-{$IFDEF FMXTranslateableExceptions}
-uses
-  FMX.Types, DECUtilRawByteStringHelper;
-{$ELSE}
-uses
-  DECUtilRawByteStringHelper;
-{$ENDIF}
 
 const
 { TODO :
@@ -614,7 +608,7 @@ begin
   end;
 end;
 
-procedure ProtectString(var Source: string); overload;
+procedure ProtectString(var Source: string);
 begin
   if Length(Source) > 0 then
   begin
@@ -624,30 +618,28 @@ begin
   end;
 end;
 
-procedure ProtectString(var Source: RawByteString); overload;
+{$IFDEF ANSISTRINGSUPPORTED}
+procedure ProtectString(var Source: AnsiString);
+{$ELSE}
+procedure ProtectString(var Source: RawByteString);
+{$ENDIF}
 begin
   if Length(Source) > 0 then
   begin
+    {$IFDEF ANSISTRINGSUPPORTED}
+    System.UniqueString(Source);
+    {$ELSE}
     // UniqueString(Source); cannot be called with a RawByteString as there is
     // no overload for it, so we need to call our own one.
     DECUtilRawByteStringHelper.UniqueString(Source);
+    {$ENDIF}
     ProtectBuffer(Pointer(Source)^, Length(Source) * SizeOf(Source[Low(Source)]));
     Source := '';
   end;
 end;
 
 {$IFNDEF NEXTGEN}
-procedure ProtectString(var Source: AnsiString); overload;
-begin
-  if Length(Source) > 0 then
-  begin
-    System.UniqueString(Source);
-    ProtectBuffer(Pointer(Source)^, Length(Source) * SizeOf(Source[Low(Source)]));
-    Source := '';
-  end;
-end;
-
-procedure ProtectString(var Source: WideString); overload;
+procedure ProtectString(var Source: WideString);
 begin
   if Length(Source) > 0 then
   begin
@@ -661,11 +653,10 @@ end;
 function BytesToRawString(const Source: TBytes): RawByteString;
 begin
   SetLength(Result, Length(Source));
-
-  if (Length(Source) > 0) then
+  if Length(Source) > 0 then
   begin
     // determine lowest string index for handling of ZeroBasedStrings
-    Move(Source[0], Result[Low(result)], length(Source));
+    Move(Source[0], Result[Low(result)], Length(Source));
   end;
 end;
 

@@ -21,16 +21,16 @@ unit TestDECFormat;
 interface
 
 // Needs to be included before any other statements
-{$I defines.inc}
+{$INCLUDE TestDefines.inc}
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
+  System.SysUtils, System.Classes,
   {$IFDEF DUnitX}
   DUnitX.TestFramework,DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-  DECBaseClass, Classes, SysUtils, DECUtil, DECFormat, DECFormatBase;
+  DECBaseClass, DECUtil, DECFormat, DECFormatBase;
 
 type
   /// <summary>
@@ -2138,16 +2138,7 @@ end;
 
 initialization
   // Register any test cases with the test runner
-  {$IFNDEF DUnitX}
-  RegisterTests('DECFormat', [TestTFormat_HEX.Suite,
-                              TestTFormat_HEXL.Suite,   TestTFormat_DECMIME32.Suite,
-                              TestTFormat_Base64.Suite, TestTFormat_Radix64.Suite,
-                              TestTFormat_UU.Suite,     TestTFormat_XX.Suite,
-                              TestTFormat_ESCAPE.Suite,
-                              TestTFormat_BigEndian16.Suite,
-                              TestTFormat_BigEndian32.Suite,
-                              TestTFormat_BigEndian64.Suite]);
-  {$ELSE}
+  {$IFDEF DUnitX}
 //  TDUnitX.RegisterTestFixture(TestTFormat);
   TDUnitX.RegisterTestFixture(TestTFormat_HEX);
   TDUnitX.RegisterTestFixture(TestTFormat_HEXL);
@@ -2160,6 +2151,16 @@ initialization
   TDUnitX.RegisterTestFixture(TestTFormat_BigEndian16);
   TDUnitX.RegisterTestFixture(TestTFormat_BigEndian32);
   TDUnitX.RegisterTestFixture(TestTFormat_BigEndian64);
+  {$ELSE}
+  RegisterTests('DECFormat', [//TestTFormat,
+                              TestTFormat_HEX.Suite,
+                              TestTFormat_HEXL.Suite,   TestTFormat_DECMIME32.Suite,
+                              TestTFormat_Base64.Suite, TestTFormat_Radix64.Suite,
+                              TestTFormat_UU.Suite,     TestTFormat_XX.Suite,
+                              TestTFormat_ESCAPE.Suite,
+                              TestTFormat_BigEndian16.Suite,
+                              TestTFormat_BigEndian32.Suite,
+                              TestTFormat_BigEndian64.Suite]);
   {$ENDIF}
 
 finalization

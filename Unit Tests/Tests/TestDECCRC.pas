@@ -21,16 +21,16 @@ unit TestDECCRC;
 interface
 
 // Needs to be included before any other statements
-{$I defines.inc}
+{$INCLUDE TestDefines.inc}
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
+  System.SysUtils, System.Classes,
   {$IFDEF DUnitX}
   DUnitX.TestFramework, DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-  Classes, DECUtil, DECCRC, SysUtils;
+  DECUtil, DECCRC;
 
 type
   /// <summary>
@@ -988,10 +988,10 @@ begin
 end;
 
 initialization
-  {$IFNDEF DUnitX}
   // Register any test cases with the test runner
-  RegisterTest(TestCRC.Suite);
-  {$ELSE}
+  {$IFDEF DUnitX}
   TDUnitX.RegisterTestFixture(TestCRC);
+  {$ELSE}
+  RegisterTest(TestCRC.Suite);
   {$ENDIF}
 end.

@@ -2,8 +2,8 @@
   The DEC team (see file NOTICE.txt) licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License. A copy of this licence is found in the root directory of
-  this project in the file LICENCE.txt or alternatively at
+  with the License. A copy of this licence is found in the root directory
+  of this project in the file LICENCE.txt or alternatively at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -24,10 +24,28 @@ unit DECRandom;
 
 interface
 
-{$I DECOptions.inc}
+{$INCLUDE DECOptions.inc}
 
 uses
-  SysUtils, DECHashBase, DECHash;
+  {$IFDEF FPC}
+  SysUtils,
+  {$ELSE}
+  System.SysUtils,
+  {$ENDIF}
+  {$IFDEF DELPHI_2010_UP}
+    System.Diagnostics,
+  {$ELSE}
+    {$IFDEF FPC}
+      {$IFDEF MSWINDOWS}
+      Windows,
+      {$ELSE}
+      LclIntf,
+      {$ENDIF}
+    {$ELSE}
+    Winapi.Windows
+    {$ENDIF}
+  {$ENDIF}
+  DECHashBase, DECHash;
 
 /// <summary>
 ///   Create a seed for the random number generator from system time and
@@ -56,7 +74,7 @@ function RandomSystemTime: Int64;
 /// <param name="Size">
 ///   Size of the buffer in byte
 /// </param>
-procedure RandomBuffer(var Buffer; Size: Integer);
+procedure RandomBuffer(out Buffer; Size: Integer);
 
 /// <summary>
 ///   Creates a buffer of the specified size filled with random bytes
@@ -133,7 +151,7 @@ var
   /// <param name="Size">
   ///   Length of the buffer to be filled in Byte.
   /// </param>
-  DoRandomBuffer: procedure(var Buffer; Size: Integer); register = nil;
+  DoRandomBuffer: procedure(out Buffer; Size: Integer); register = nil;
 
   /// <summary>
   ///   This variable allows overriding the seed value generation procedure.
@@ -146,20 +164,6 @@ var
   RandomClass: TDECHashClass = THash_SHA256;
 
 implementation
-
-uses
-  {$IFDEF DELPHI_2010_UP}
-    Diagnostics
-  {$ELSE !DELPHI_2010_UP}
-    {$IFDEF MSWINDOWS}
-    Windows
-    {$ELSE !MSWINDOWS}
-      {$IFDEF FPC}
-      LclIntf
-      {$ENDIF !FPC}
-    {$ENDIF !MSWINDOWS}
-  {$ENDIF !DELPHI_2010_UP}
-  ;
 
 {$IFOPT Q+}{$DEFINE RESTORE_OVERFLOWCHECKS}{$Q-}{$ENDIF}
 {$IFOPT R+}{$DEFINE RESTORE_RANGECHECKS}{$R-}{$ENDIF}
@@ -243,7 +247,7 @@ end;
 ///   New seed value after calculating the random number for the last byte in
 ///   the buffer.
 /// </returns>
-function DoRndBuffer(Seed: Cardinal; var Buffer; Size: Integer): Cardinal;
+function DoRndBuffer(Seed: Cardinal; out Buffer; Size: Integer): Cardinal;
 // comparable to Delphi Random() function
 var
   P: PByte;
@@ -262,7 +266,7 @@ begin
   end;
 end;
 
-procedure RandomBuffer(var Buffer; Size: Integer);
+procedure RandomBuffer(out Buffer; Size: Integer);
 begin
   if Assigned(DoRandomBuffer) then
     DoRandomBuffer(Buffer, Size)
@@ -331,7 +335,7 @@ begin
   Result := FHash.DigestAsBytes[1]; // no real predictable dependency to above FHash.Digest[0] !
 end;
 
-procedure DoBuffer(var Buffer; Size: Integer);
+procedure DoBuffer(out Buffer; Size: Integer);
 var
   i: Integer;
 begin

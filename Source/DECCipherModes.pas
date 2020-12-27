@@ -2,8 +2,8 @@
   The DEC team (see file NOTICE.txt) licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License. A copy of this licence is found in the root directory of
-  this project in the file LICENCE.txt or alternatively at
+  with the License. A copy of this licence is found in the root directory
+  of this project in the file LICENCE.txt or alternatively at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -18,10 +18,15 @@ unit DECCipherModes;
 
 interface
 
-uses
-  System.SysUtils, DECCipherBase;
+{$INCLUDE DECOptions.inc}
 
-{$I DECOptions.inc}
+uses
+  {$IFDEF FPC}
+  SysUtils, TypInfo,
+  {$ELSE}
+  System.SysUtils, System.TypInfo,
+  {$ENDIF}
+  DECCipherBase, DECUtil;
 
 type
   /// <summary>
@@ -242,16 +247,13 @@ type
 
 implementation
 
-uses
-  System.TypInfo, DECUtil;
-
 resourcestring
   sInvalidMessageLength = 'Message length for mode %0:s must be a multiple of %1:d bytes';
 
 procedure TDECCipherModes.ReportInvalidMessageLength(Cipher: TDECCipher);
 begin
   raise EDECCipherException.CreateResFmt(@sInvalidMessageLength,
-                                         [System.TypInfo.GetEnumName(TypeInfo(TCipherMode),
+                                         [GetEnumName(TypeInfo(TCipherMode),
                                          Integer(Cipher.Mode)),
                                          Cipher.Context.BlockSize]);
 end;

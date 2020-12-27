@@ -18,6 +18,9 @@ unit TestDECTestDataContainer;
 
 interface
 
+uses
+  System.SysUtils, System.Classes;
+
 type
   ITestDataInputVector = interface
   ['{CEC7AE49-DA2D-438A-BE8B-2BC2FA1DBCD0}']
@@ -126,9 +129,6 @@ type
 function CreateTestDataContainer:ITestDataContainer;
 
 implementation
-
-uses
-  Classes;
 
 type
   TTestDataInputVector = class(TInterfacedObject, ITestDataInputVector)

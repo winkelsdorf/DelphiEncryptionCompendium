@@ -1,7 +1,0 @@
-*.dcu
-/DECDUnitTestSuite.exe
-/DECDUnitTestSuite.rsm
-/DECDUnitXTestSuite.exe
-/DECDUnitXTestSuite.rsm
-/dunit.ini
-/dunitx-results.xml

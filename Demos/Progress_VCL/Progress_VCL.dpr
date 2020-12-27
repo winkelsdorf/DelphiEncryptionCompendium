@@ -1,4 +1,4 @@
-program CryptoWorkbench;
+program Progress_VCL;
 
 uses
   Vcl.Forms,

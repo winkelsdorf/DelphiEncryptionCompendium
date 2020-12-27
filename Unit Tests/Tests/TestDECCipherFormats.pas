@@ -19,19 +19,18 @@
 unit TestDECCipherFormats;
 
 // Needs to be included before any other statements
-{$I defines.inc}
+{$INCLUDE TestDefines.inc}
 
 interface
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
   {$IFDEF DUnitX}
   DUnitX.TestFramework,DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-
-  Classes, SysUtils, DECCipherBase, DECCiphers, DECCipherFormats;
+  System.Classes, System.SysUtils,
+  DECCipherBase, DECCiphers, DECCipherFormats, DECBaseClass, DECFormat, DECUtil;
 
 type
   /// <summary>
@@ -142,9 +141,6 @@ type
   end;
 
 implementation
-
-uses
-  DECBaseClass, DECFormat, DECUtil;
 
 { TestTDECCipherFormats }
 
@@ -663,9 +659,9 @@ end;
 
 initialization
   // Register any test cases with the test runner
-  {$IFNDEF DUnitX}
-  RegisterTest(TestTDECCipherFormats.Suite);
-  {$ELSE}
+  {$IFDEF DUnitX}
   TDUnitX.RegisterTestFixture(TestTDECCipherFormats);
+  {$ELSE}
+  RegisterTest(TestTDECCipherFormats.Suite);
   {$ENDIF}
 end.

@@ -2,8 +2,8 @@
   The DEC team (see file NOTICE.txt) licenses this file
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
-  with the License. A copy of this licence is found in the root directory of
-  this project in the file LICENCE.txt or alternatively at
+  with the License. A copy of this licence is found in the root directory
+  of this project in the file LICENCE.txt or alternatively at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,9 +19,14 @@ unit DECCiphers;
 interface
 
 uses
-  DECCipherBase, DECCipherFormats, DECUtil, DECTypes;
+  {$IFDEF FPC}
+  SysUtils,
+  {$ELSE}
+  System.SysUtils,
+  {$ENDIF}
+  DECCipherBase, DECCipherFormats, DECUtil, DECTypes, DECData, DECDataCipher;
 
-{$I DECOptions.inc}
+{$INCLUDE DECOptions.inc}
 
 type
   // Cipher Classes
@@ -825,9 +830,6 @@ implementation
 {$IFOPT Q+}{$DEFINE RESTORE_OVERFLOWCHECKS}{$Q-}{$ENDIF}
 {$IFOPT R+}{$DEFINE RESTORE_RANGECHECKS}{$R-}{$ENDIF}
 
-uses
-  System.SysUtils, DECData, DECDataCipher;
-
 { TCipher_Null }
 
 class function TCipher_Null.Context: TCipherContext;
@@ -974,7 +976,7 @@ begin
   Assert(Size = Context.BlockSize, 'Size of ' + IntToStr(Size) + ' does not equal '+
                                    'block size of ' + IntToStr(Context.BlockSize));
 
-  D := FBuffer;
+  D := Pointer(FBuffer);
   P := Pointer(PByte(FBuffer) + SizeOf(Blowfish_Data)); // for Pointer Math
   A := SwapUInt32(PUInt32Array(Source)[0]) xor P[0]; P := @P[1];
   B := SwapUInt32(PUInt32Array(Source)[1]);
@@ -1048,7 +1050,7 @@ var
 begin
   Assert(Size = Context.BlockSize);
 
-  D := FBuffer;
+  D := Pointer(FBuffer);
   P := Pointer(PByte(FBuffer) + SizeOf(Blowfish_Data) + SizeOf(Blowfish_Key) - SizeOf(Int32));
   A := SwapUInt32(PUInt32Array(Source)[0]) xor P[0];
   B := SwapUInt32(PUInt32Array(Source)[1]);
@@ -2424,7 +2426,7 @@ var
 begin
   Assert(Size = Context.BlockSize);
 
-  K := FBuffer;
+  K := Pointer(FBuffer);
   A := PUInt32Array(Source)[0];
   B := PUInt32Array(Source)[1] + K[0];
   C := PUInt32Array(Source)[2];
@@ -4723,7 +4725,7 @@ var
 begin
   Assert(Size = Context.BlockSize);
 
-  D  := FBuffer;
+  D  := Pointer(FBuffer);
   B0 := PUInt32Array(Source)[0];
   B1 := PUInt32Array(Source)[1];
   B2 := PUInt32Array(Source)[2];

@@ -4,6 +4,6 @@
 *.dproj   text
 *.dfm     text
 *.fmx     text
-*.dproj.local text
+*.local   text
 *.inc     text
 *.txt     text

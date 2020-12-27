@@ -23,13 +23,21 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Layouts,
   FMX.StdCtrls, FMX.ListBox, FMX.Controls.Presentation, FMX.Edit, System.Rtti,
-  FMX.Grid.Style, FMX.Grid, FMX.ScrollBox, DECCipherBase, DECFormatBase;
+  FMX.Grid.Style, FMX.Grid, FMX.ScrollBox,
+  System.TypInfo, Generics.Collections, FMX.Platform,
+  {$IFDEF Android}
+  Androidapi.JNI.GraphicsContentViewText,
+  Androidapi.Helpers,
+  Androidapi.JNI.App,
+  {$ENDIF}
+  DECCipherBase, DECFormatBase, DECBaseClass, DECFormat, DECCipherModes,
+  DECCipherFormats, DECCiphers, DECUtil;
 
 type
   /// <summary>
   ///   Form of the cross platform FMX Cipher demo
   /// </summary>
-  TMainForm = class(TForm)
+  TFormMain = class(TForm)
     VertScrollBox1: TVertScrollBox;
     LayoutTop: TLayout;
     Label2: TLabel;
@@ -77,24 +85,13 @@ type
   end;
 
 var
-  FormMain: TMainForm;
+  FormMain: TFormMain;
 
 implementation
 
-uses
-  System.TypInfo, Generics.Collections, FMX.Platform,
-  DECBaseClass, DECFormat, DECCipherModes,
-  DECCipherFormats, DECCiphers, DECUtil
-  {$IFDEF Android}
-  ,
-  Androidapi.JNI.GraphicsContentViewText,
-  Androidapi.Helpers,
-  Androidapi.JNI.App
-  {$ENDIF};
-
 {$R *.fmx}
 
-procedure TMainForm.ButtonDecryptClick(Sender: TObject);
+procedure TFormMain.ButtonDecryptClick(Sender: TObject);
 var
   Cipher           : TDECCipher;
   InputFormatting  : TDECFormatClass;
@@ -129,7 +126,7 @@ begin
     ShowErrorMessage('No cipher algorithm selected');
 end;
 
-procedure TMainForm.ButtonEncryptClick(Sender: TObject);
+procedure TFormMain.ButtonEncryptClick(Sender: TObject);
 var
   Cipher           : TDECCipher;
   InputFormatting  : TDECFormatClass;
@@ -164,7 +161,7 @@ begin
     ShowErrorMessage('No cipher algorithm selected');
 end;
 
-function TMainForm.GetSettings(var InputFormatting  : TDECFormatClass;
+function TFormMain.GetSettings(var InputFormatting  : TDECFormatClass;
                                var OutputFormatting : TDECFormatClass): Boolean;
 begin
   result := false;
@@ -202,7 +199,7 @@ begin
   result := true;
 end;
 
-function TMainForm.GetCipherAlgorithm(var Cipher : TDECCipher):Boolean;
+function TFormMain.GetCipherAlgorithm(var Cipher : TDECCipher):Boolean;
 begin
   result := false;
 
@@ -228,7 +225,7 @@ begin
   result := true;
 end;
 
-function TMainForm.GetSelectedCipherMode:TCipherMode;
+function TFormMain.GetSelectedCipherMode:TCipherMode;
 begin
   // Determine selected block chaining method via RTTI (runtime type information)
   result := TCipherMode(System.TypInfo.GetEnumValue(
@@ -236,7 +233,7 @@ begin
               ComboBoxChainingMethod.Items[ComboBoxChainingMethod.ItemIndex]));
 end;
 
-procedure TMainForm.ShowErrorMessage(ErrorMsg: string);
+procedure TFormMain.ShowErrorMessage(ErrorMsg: string);
 var
   AsyncDlg : IFMXDialogServiceASync;
 begin
@@ -249,7 +246,7 @@ begin
     end);
 end;
 
-procedure TMainForm.ComboBoxCipherAlgorithmChange(Sender: TObject);
+procedure TFormMain.ComboBoxCipherAlgorithmChange(Sender: TObject);
 var
   Context : TCipherContext;
 begin
@@ -282,7 +279,7 @@ begin
     StringGridContext.Cells[1, 6] := 'asymmetric';
 end;
 
-procedure TMainForm.EditPlainTextChangeTracking(Sender: TObject);
+procedure TFormMain.EditPlainTextChangeTracking(Sender: TObject);
 begin
   if CheckBoxLiveCalc.IsChecked then
   begin
@@ -293,7 +290,7 @@ begin
   end;
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);
 var
   AppService : IFMXApplicationService;
 begin
@@ -308,12 +305,12 @@ begin
   InitCipherModes;
 end;
 
-procedure TMainForm.FormResize(Sender: TObject);
+procedure TFormMain.FormResize(Sender: TObject);
 begin
   LayoutTop.Width    := VertScrollBox1.Width;
 end;
 
-procedure TMainForm.InitFormatCombos;
+procedure TFormMain.InitFormatCombos;
 var
   MyClass : TPair<Int64, TDECClass>;
   Formats : TStringList;
@@ -347,7 +344,7 @@ begin
   end;
 end;
 
-procedure TMainForm.InitCipherCombo;
+procedure TFormMain.InitCipherCombo;
 var
   MyClass : TPair<Int64, TDECClass>;
   Ciphers : TStringList;
@@ -373,7 +370,7 @@ begin
   end;
 end;
 
-procedure TMainForm.InitCipherModes;
+procedure TFormMain.InitCipherModes;
 var
   Mode : TCipherMode;
 begin

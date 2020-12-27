@@ -1,0 +1,43 @@
+ProjektOptions
+    SearchPath:        {DECInstallPath}\Compiled\DCU_IDE$(ProductVersion)_$(Platform)_Release
+or
+    SearchPath:        {DECInstallPath}\Compiled\DCU_IDE$(ProductVersion)_$(Platform)_$(Config)
+
+or IDE-Options (Tools\Options: Language\Delphi\Library)
+    Bibliothekspfad:   {DECInstallPath}\Compiled\DCU_IDE$(ProductVersion)_$(Platform)_Release
+    Debug-DCU-Pfad:    {DECInstallPath}\Compiled\DCU_IDE$(ProductVersion)_$(Platform)_Debug
+    Suchpfad:          {DECInstallPath}\Source
+
+und Lazarus/FPC
+    Unit-OutputDir:    $(PkgDir)\..\Compiled\DCU_Lazarus_$(TargetCPU)_$(TargetOS)_$(BuildMode)\
+
+
+
+
+DEC-SourceCodes:       {DECInstallPath}\Source\*.pas
+DEC-Help:              {DECInstallPath}\Docs\*
+Demo-Projects:         {DECInstallPath}\Demos\*
+
+PreCompiled Units:     {DECInstallPath}\Compiled\DCU_IDE{21.0}_{Win32}_{Release}\*
+Temp for Demos&Tests:  {DECInstallPath}\Compiled\DCU_IDE{21.0}_{Win32}__Demos\*
+Units for Lazarus/FPC: {DECInstallPath}\Compiled\DCU_Lazarus_{x86_64}_{win64}_{Default}\*
+
+PreCompiled Lib&Tests: {DECInstallPath}\Compiled\BIN_IDE{21.0}_{Win32}_{Release}\*
+PreCompiled Demos:     {DECInstallPath}\Compiled\BIN_IDExx.x_{Win32}__Demos\*
+
+Compile ALL:           {DECInstallPath}\Demos\BuildAll.cmd
+Source/Tests/Demos:    {DECInstallPath}\Demos\DEC60Complete.groupproj
+Delphi-Package (DCU):  {DECInstallPath}\Demos\DEC60.dproj
+Lazarus-Package:       {DECInstallPath}\Demos\DEC60Lazarus.lpk
+Projekt-Options:       {DECInstallPath}\Demos\SearchPaths-Demo.optset : for ProjectOptions\Build\Delphi-Compiler > All Configs/Platforms
+
+
+
+BuildAll.cmd
+    alle Delphis unter %ProgramFiles(x86)%\Embarcadero\
+    Lazarus/FPC in     C:\lazarus\
+
+https://www.lazarus-ide.org/index.php?page=downloads
+-> Windows (64 Bits) Add ons = Win64-Install + Win32
+lazarus-2.0.10-fpc-3.2.0-win64.exe
+lazarus-2.0.10-fpc-3.2.0-cross-i386-win32-win64.exe

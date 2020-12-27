@@ -26,13 +26,7 @@ program Format_Console;
 
 uses
   System.SysUtils,
-  DECFormat in '..\..\Source\DECFormat.pas',
-  DECFormatBase in '..\..\Source\DECFormatBase.pas',
-  DECBaseClass in '..\..\Source\DECBaseClass.pas',
-  DECUtil in '..\..\Source\DECUtil.pas',
-  DECTypes in '..\..\Source\DECTypes.pas',
-  DECCRC in '..\..\Source\DECCRC.pas',
-  DECUtilRawByteStringHelper in '..\..\Source\DECUtilRawByteStringHelper.pas';
+  DECFormat;
 
 var
   s, s1 : string;

@@ -18,21 +18,25 @@ unit DECUtilRawByteStringHelper;
 
 interface
 
-  /// <summary>
-  ///   System.pas does not contain a RawByteString compatible version of this
-  ///   routine so we created our own, copying and adapting code from system.pas
-  ///   for the NextGen compiler and using a solution from Remy Lebeau for the
-  ///   Win32/Win64 compiler.
-  /// </summary>
-  /// <param name="str">
-  ///   String to be processed
-  /// </param>
-  procedure UniqueString(var Str: RawByteString);
+uses
+  {$IFDEF FPC}
+  SysUtils;
+  {$ELSE}
+  System.SysUtils;
+  {$ENDIF}
+
+/// <summary>
+///   System.pas does not contain a RawByteString compatible version of this
+///   routine so we created our own, copying and adapting code from system.pas
+///   for the NextGen compiler and using a solution from Remy Lebeau for the
+///   Win32/Win64 compiler.
+/// </summary>
+/// <param name="str">
+///   String to be processed
+/// </param>
+procedure UniqueString(var Str: RawByteString);
 
 implementation
-
-uses
-  System.SysUtils;
 
 type
   // Duplicate of the System.pas internal declaration. Needs to be kept in sync.
@@ -59,9 +63,8 @@ begin
     // anyway. All _WideStr allocations have even length, and need a double
     // null terminator.
     if CharLength >= MaxInt - SizeOf(StrRec) then
-      raise System.SysUtils.EIntOverflow.Create(
+      raise EIntOverflow.Create(
         'IntOverflow in _NewAnsiString. CharLength: ' + CharLength.ToString);
-//    _IntOver;
 
     GetMem(P, CharLength + SizeOf(StrRec) + 1 + ((CharLength + 1) and 1));
     Result := Pointer(PByte(P) + SizeOf(StrRec));
@@ -89,7 +92,11 @@ begin
     Pointer(S) := nil;
     if P.refCnt > 0 then
     begin
+      {$IFDEF FPC}
+      if InterlockedDecrement(P.refCnt) = 0 then
+      {$ELSE}
       if AtomicDecrement(P.refCnt) = 0 then
+      {$ENDIF}
         FreeMem(P);
     end;
   end;

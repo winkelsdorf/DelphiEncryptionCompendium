@@ -26,20 +26,7 @@ program Random_Console;
 
 uses
   System.SysUtils,
-  DECRandom in '..\..\Source\DECRandom.pas',
-  DECHashBase in '..\..\Source\DECHashBase.pas',
-  DECBaseClass in '..\..\Source\DECBaseClass.pas',
-  DECFormatBase in '..\..\Source\DECFormatBase.pas',
-  DECHashInterface in '..\..\Source\DECHashInterface.pas',
-  DECTypes in '..\..\Source\DECTypes.pas',
-  DECUtil in '..\..\Source\DECUtil.pas',
-  DECUtilRawByteStringHelper in '..\..\Source\DECUtilRawByteStringHelper.pas',
-  DECCRC in '..\..\Source\DECCRC.pas',
-  DECFormat in '..\..\Source\DECFormat.pas',
-  DECHash in '..\..\Source\DECHash.pas',
-  DECData in '..\..\Source\DECData.pas',
-  DECDataHash in '..\..\Source\DECDataHash.pas',
-  TestDECRandom in '..\..\Unit Tests\Tests\TestDECRandom.pas';
+  DECRandom;
 
 var
   RandomNumbers: TBytes;

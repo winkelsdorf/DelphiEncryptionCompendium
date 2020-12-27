@@ -26,20 +26,10 @@ program Cipher_Console;
 
 uses
   System.SysUtils,
-  DECBaseClass in '..\..\Source\DECBaseClass.pas',
-  DECCipherBase in '..\..\Source\DECCipherBase.pas',
-  DECCipherModes in '..\..\Source\DECCipherModes.pas',
-  DECCiphers in '..\..\Source\DECCiphers.pas',
-  DECCRC in '..\..\Source\DECCRC.pas',
-  DECFormat in '..\..\Source\DECFormat.pas',
-  DECFormatBase in '..\..\Source\DECFormatBase.pas',
-  DECTypes in '..\..\Source\DECTypes.pas',
-  DECUtil in '..\..\Source\DECUtil.pas',
-  DECData in '..\..\Source\DECData.pas',
-  DECCipherFormats in '..\..\Source\DECCipherFormats.pas',
-  DECUtilRawByteStringHelper in '..\..\Source\DECUtilRawByteStringHelper.pas',
-  DECCipherInterface in '..\..\Source\DECCipherInterface.pas',
-  DECDataCipher in '..\..\Source\DECDataCipher.pas';
+  DECCipherBase,
+  DECCipherModes,
+  DECCipherFormats,
+  DECCiphers;
 
 var
   Cipher     : TCipher_1DES;

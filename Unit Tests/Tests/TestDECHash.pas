@@ -21,19 +21,18 @@ unit TestDECHash;
 interface
 
 // Needs to be included before any other statements
-{$I defines.inc}
-{$I ..\..\Source\DECOptions.inc}
+{$INCLUDE TestDefines.inc}
+{$INCLUDE ..\..\Source\DECOptions.inc}
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
+  System.SysUtils, System.Classes, Generics.Collections,
   {$IFDEF DUnitX}
   DUnitX.TestFramework,DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-  Generics.Collections,
-  TestDECTestDataContainer, DECTypes,
-  DECBaseClass, DECHash, DECHashBase, Classes, SysUtils, DECUtil, DECFormatBase;
+  TestDECTestDataContainer,
+  DECTypes, DECBaseClass, DECHash, DECHashBase, DECUtil, DECFormatBase, DECFormat;
 
 type
   /// <summary>
@@ -532,9 +531,6 @@ type
   end;
 
 implementation
-
-uses
-  DECFormat;
 
 procedure TestTHash_MD2.SetUp;
 var
@@ -3858,47 +3854,7 @@ end;
 
 initialization
   // Register any test cases with the test runner
-  {$IFNDEF DUnitX}
-  RegisterTests('DECHash', [THash_TestIncrement8.Suite,
-                            TestTDECHash.Suite,
-                            TestTHash_MD2.Suite,
-                            TestTHash_MD4.Suite,
-                            TestTHash_MD5.Suite,
-                            TestTHash_RipeMD128.Suite,
-                            TestTHash_RipeMD160.Suite,
-                            TestTHash_RipeMD256.Suite,
-                            TestTHash_RipeMD320.Suite,
-                            TestTHash_SHA0.Suite,
-                            {$IFDEF OLD_SHA_NAME}
-                            TestTHash_SHA.Suite,
-                            {$ENDIF}
-                            TestTHash_SHA1.Suite,
-                            TestTHash_SHA256.Suite,
-                            TestTHash_SHA384.Suite,
-                            TestTHash_SHA512.Suite,
-                            TestTHash_Haval128.Suite,
-                            TestTHash_Haval160.Suite,
-                            TestTHash_Haval192.Suite,
-                            TestTHash_Haval224.Suite,
-                            TestTHash_Haval256.Suite,
-                            TestTHash_Tiger_3Rounds.Suite,
-                            TestTHash_Tiger_4Rounds.Suite,
-                            TestTHash_Panama.Suite,
-
-                            TestTHash_Whirlpool0.Suite,
-                            TestTHash_WhirlpoolT.Suite,
-                            TestTHash_Whirlpool1.Suite,
-
-                            {$IFDEF OLD_WHIRLPOOL_NAMES}
-                            TestTHash_Whirlpool.Suite,
-                            {$ENDIF}
-
-                            TestTHash_Square.Suite,
-                            TestTHash_Snefru128.Suite,
-                            TestTHash_Snefru256.Suite,
-                            TestTHash_Sapphire.Suite
-                              ]);
-  {$ELSE}
+  {$IFDEF DUnitX}
   TDUnitX.RegisterTestFixture(THash_TestIncrement8);
   TDUnitX.RegisterTestFixture(TestTDECHash);
   TDUnitX.RegisterTestFixture(TestTHash_MD2);
@@ -3939,5 +3895,45 @@ initialization
   TDUnitX.RegisterTestFixture(TestTHash_Snefru128);
   TDUnitX.RegisterTestFixture(TestTHash_Snefru256);
   TDUnitX.RegisterTestFixture(TestTHash_Sapphire);
+  {$ELSE}
+  RegisterTests('DECHash', [THash_TestIncrement8.Suite,
+                            TestTDECHash.Suite,
+                            TestTHash_MD2.Suite,
+                            TestTHash_MD4.Suite,
+                            TestTHash_MD5.Suite,
+                            TestTHash_RipeMD128.Suite,
+                            TestTHash_RipeMD160.Suite,
+                            TestTHash_RipeMD256.Suite,
+                            TestTHash_RipeMD320.Suite,
+                            TestTHash_SHA0.Suite,
+                            {$IFDEF OLD_SHA_NAME}
+                            TestTHash_SHA.Suite,
+                            {$ENDIF}
+                            TestTHash_SHA1.Suite,
+                            TestTHash_SHA256.Suite,
+                            TestTHash_SHA384.Suite,
+                            TestTHash_SHA512.Suite,
+                            TestTHash_Haval128.Suite,
+                            TestTHash_Haval160.Suite,
+                            TestTHash_Haval192.Suite,
+                            TestTHash_Haval224.Suite,
+                            TestTHash_Haval256.Suite,
+                            TestTHash_Tiger_3Rounds.Suite,
+                            TestTHash_Tiger_4Rounds.Suite,
+                            TestTHash_Panama.Suite,
+
+                            TestTHash_Whirlpool0.Suite,
+                            TestTHash_WhirlpoolT.Suite,
+                            TestTHash_Whirlpool1.Suite,
+
+                            {$IFDEF OLD_WHIRLPOOL_NAMES}
+                            TestTHash_Whirlpool.Suite,
+                            {$ENDIF}
+
+                            TestTHash_Square.Suite,
+                            TestTHash_Snefru128.Suite,
+                            TestTHash_Snefru256.Suite,
+                            TestTHash_Sapphire.Suite
+                           ]);
   {$ENDIF}
 end.

@@ -21,16 +21,16 @@ unit TestDECFormatBase;
 interface
 
 // Needs to be included before any other statements
-{$I defines.inc}
+{$INCLUDE TestDefines.inc}
 
 uses
-  {$IFNDEF DUnitX}
-  TestFramework,
-  {$ENDIF}
   {$IFDEF DUnitX}
   DUnitX.TestFramework,DUnitX.DUnitCompatibility,
+  {$ELSE}
+  TestFramework,
   {$ENDIF}
-  Classes, DECUtil, DECBaseClass, SysUtils, DECFormatBase;
+  System.SysUtils, System.Classes,
+  DECUtil, DECBaseClass, DECFormatBase, DECFormat;
 
 type
   // Test methods for class TFormat_Copy
@@ -108,9 +108,6 @@ type
   end;
 
 implementation
-
-uses
-  DECFormat;
 
 type
   TestRecTableFindBinary = record
@@ -437,12 +434,12 @@ begin
 end;
 
 initialization
-  {$IFNDEF DUnitX}
   // Register any test cases with the test runner
-  RegisterTests('DECFormatBase', [TestTFormat.Suite, TestTFormat_Copy.Suite]);
-  {$ELSE}
+  {$IFDEF DUnitX}
   TDUnitX.RegisterTestFixture(TestTFormat);
   TDUnitX.RegisterTestFixture(TestTFormat_Copy);
+  {$ELSE}
+  RegisterTests('DECFormatBase', [TestTFormat.Suite, TestTFormat_Copy.Suite]);
   {$ENDIF}
 end.
 
